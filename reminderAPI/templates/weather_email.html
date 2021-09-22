@@ -1,0 +1,16 @@
+{% autoescape off %}
+
+<p>Hello, dear {{user}}</p>
+
+<p>Here is weather in {{city}}</p>
+<p>
+<br>Current temperature is {{weather.temp}} C
+<br>It feels like {{weather.feels_like}} C
+<br>Atmosphere pressure is {{weather.pressure}} Pa
+<br>Wind speed is {{weather.wind}} m/s
+<br>Visibility is {{weather.visibility}}
+</p>
+<p>Have a nice day!</p>
+
+<p>Sincerely yours, Weather Reminder Service</p>
+{% endautoescape %}
