@@ -9,6 +9,7 @@ from rest_framework import permissions
 from services.notifications import send_notification_email
 from reminderAPI.models import Weather
 from .tasks import send_notification
+from django.http.request import QueryDict
 
 
 class IsOwnerOrReadOnly(permissions.BasePermission):
@@ -48,9 +49,12 @@ class CreateReminder(GenericAPIView):
     def post(self, request, *args, **kwargs):
         user = WeatherReminderUser.objects.get(id=request.user.id)
         serializer = self.get_serializer(data=request.data)
-        request.data._mutable = True
-        request.data['city'] = request.data.get('city', "No city was selected").title()
-        request.data._mutable = False
+        if isinstance(request.data, QueryDict):
+            request.data._mutable = True
+            request.data['city'] = request.data.get('city', "No city was selected").title()
+            request.data._mutable = False
+        else:
+            request.data['city'] = request.data.get('city', "No city was selected").title()
         serializer.is_valid(raise_exception=True)
         serializer.save(owner=self.request.user)
         reminder = serializer.save()
